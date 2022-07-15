@@ -38,7 +38,7 @@ class _SubmitPageState extends State<SubmitPage> {
   Score score = Score(
     score1: 0,
     score2: 0,
-    school_name: '',
+    school_name: schools.first,
     sub_name: '',
     group: 0,
   );
