@@ -42,17 +42,17 @@ class _ShowScreenState extends State<ShowScreen> {
     return GetBuilder<ShowController>(builder: (controller) {
       List<Score> scores = controller.scores;
       return Padding(
-        padding: const EdgeInsets.only(top: 200),
+        padding: const EdgeInsets.only(top: 160),
         child: Material(
           color: Colors.white,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(12),
             topRight: Radius.circular(12),
           ),
           child: Transform.translate(
-            offset: Offset(0.0, -32),
+            offset: const Offset(0.0, -32),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
                   Row(
@@ -68,71 +68,53 @@ class _ShowScreenState extends State<ShowScreen> {
                       if (scores.length > 2) three(scores[2]),
                     ],
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 1,
-                    color: Colors.grey,
+                  const Divider(),
+                  Row(
+                    children: [
+                      Expanded(child: title()),
+                      if (GetPlatform.isDesktop) Expanded(child: title()),
+                    ],
                   ),
-                  SizedBox(
-                    height: 32,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              // color: Colors.amberAccent,
-                              width: 40,
-                              child: Center(child: Text('排名')),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            SizedBox(
-                              width: 140,
-                              child: Container(
-                                // color: Colors.blue,
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text('院校|队伍'),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            SizedBox(
-                              width: 60,
-                              child: Center(child: Text('第一轮')),
-                            ),
-                            SizedBox(
-                              width: 60,
-                              child: Center(child: Text('第二轮')),
-                            ),
-                            SizedBox(
-                              width: 60,
-                              child: Center(child: Text('总分')),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(),
+                  const Divider(),
                   Expanded(
-                    child: ListView.separated(
-                      itemCount: scores.length,
-                      itemBuilder: (context, index) {
-                        Score score = scores[index];
-                        return item(index, score);
-                      },
-                      padding: EdgeInsets.zero,
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const Divider();
-                      },
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListView.separated(
+                            physics: BouncingScrollPhysics(),
+                            itemCount: scores.length,
+                            itemBuilder: (context, index) {
+                              Score score = scores[index];
+                              return item(index, score);
+                            },
+                            padding: EdgeInsets.zero,
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return const Divider();
+                            },
+                          ),
+                        ),
+                        if (GetPlatform.isDesktop)
+                          Container(
+                            width: 1,
+                            color: Colors.black12,
+                          ),
+                        if (GetPlatform.isDesktop)
+                          Expanded(
+                            child: ListView.separated(
+                              itemCount: scores.length,
+                              itemBuilder: (context, index) {
+                                Score score = scores[index];
+                                return item(index, score);
+                              },
+                              padding: EdgeInsets.zero,
+                              separatorBuilder:
+                                  (BuildContext context, int index) {
+                                return const Divider();
+                              },
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 ],
@@ -142,6 +124,57 @@ class _ShowScreenState extends State<ShowScreen> {
         ),
       );
     });
+  }
+
+  SizedBox title() {
+    return SizedBox(
+      height: 32,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Container(
+                // color: Colors.amberAccent,
+                width: 40,
+                child: const Center(child: const Text('排名')),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              SizedBox(
+                width: 140,
+                child: Container(
+                  // color: Colors.blue,
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('院校|队伍'),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const SizedBox(
+                width: 60,
+                child: Center(child: Text('第一轮')),
+              ),
+              const SizedBox(
+                width: 60,
+                child: const Center(child: Text('第二轮')),
+              ),
+              const SizedBox(
+                width: 60,
+                child: Center(child: const Text('总分')),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Container item(int index, Score score) {
@@ -157,9 +190,9 @@ class _ShowScreenState extends State<ShowScreen> {
                   // color: Colors.yellow,
                   child: Center(
                     child: Builder(builder: (context) {
-                      Color color = Color(0xff333333);
+                      Color color = const Color(0xff333333);
                       if (index < 3) {
-                        color = Color(0xffe77567);
+                        color = const Color(0xffe77567);
                       }
                       return Text(
                         '${index + 1}',
@@ -172,7 +205,7 @@ class _ShowScreenState extends State<ShowScreen> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Container(
@@ -185,7 +218,7 @@ class _ShowScreenState extends State<ShowScreen> {
                       backgroundImage: AssetImage(getLogo(score.school_name!)),
                       radius: 16.0,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 4,
                     ),
                     Expanded(
@@ -194,16 +227,16 @@ class _ShowScreenState extends State<ShowScreen> {
                         children: [
                           Text(
                             score.sub_name!,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14.0,
-                              color: Color(0xff333333),
+                              color: const Color(0xff333333),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
                             score.school_name!,
                             style: TextStyle(
-                              color: Color(0xff333333).withOpacity(0.8),
+                              color: const Color(0xff333333).withOpacity(0.8),
                               fontSize: 10.0,
                             ),
                           ),
@@ -223,7 +256,7 @@ class _ShowScreenState extends State<ShowScreen> {
                 child: Center(
                   child: Text(
                     '${score.score1!}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -234,7 +267,7 @@ class _ShowScreenState extends State<ShowScreen> {
                 child: Center(
                   child: Text(
                     '${score.score2!}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -245,7 +278,7 @@ class _ShowScreenState extends State<ShowScreen> {
                 child: Center(
                   child: Text(
                     '${score.score1! + score.score2!}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -260,14 +293,14 @@ class _ShowScreenState extends State<ShowScreen> {
 
   Widget three(Score score) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         children: [
           Image.asset(
             getLogo(score.school_name!),
             width: 64,
           ),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
           Text('${score.school_name}'),
@@ -279,11 +312,10 @@ class _ShowScreenState extends State<ShowScreen> {
   Widget header() {
     return Container(
       decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/backgroundImage.png'),
-          fit: BoxFit.fill,
-        )
-      ),
+          image: DecorationImage(
+        image: AssetImage('assets/backgroundImage.png'),
+        fit: BoxFit.fill,
+      )),
       width: double.infinity,
       // color: Theme.of(context).primaryColor.withOpacity(0.2),
       child: Padding(
@@ -292,17 +324,17 @@ class _ShowScreenState extends State<ShowScreen> {
           children: const [
             Text(
               'ENJOY AI Master 2022西部选拔赛',
-              style: TextStyle(fontSize: 16.0,color: Colors.white),
+              style: TextStyle(fontSize: 16.0, color: Colors.white),
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 10),
             Text(
               '2022全国大学生智能汽车竞赛',
-              style: TextStyle(fontSize: 32.0,color: Colors.white),
+              style: TextStyle(fontSize: 32.0, color: Colors.white),
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 10),
             Text(
               '百度智慧交通赛项',
-              style: TextStyle(fontSize: 16.0,color: Colors.white),
+              style: TextStyle(fontSize: 16.0, color: Colors.white),
             ),
           ],
         ),

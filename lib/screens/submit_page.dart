@@ -4,13 +4,14 @@ import 'package:global_repository/global_repository.dart';
 
 import '../gen.dart';
 
-List<String> groups = [
-  '厦门工学院',
-  '厦门理工学院',
-  '华南师范大学',
-  '哈尔滨工业大学',
-  '中山大学',
-  '成都锦城学院',
+class Organization {
+  Organization(this.name, this.schollName);
+  final String name;
+  final String schollName;
+}
+
+List<Organization> groups = [
+  Organization('深蓝黄金矿工队', '华南师范大学'),
 ];
 
 class SubmitPage extends StatefulWidget {
@@ -23,6 +24,8 @@ class SubmitPage extends StatefulWidget {
 class _SubmitPageState extends State<SubmitPage> {
   // 比赛轮数
   int gameIndex = 1;
+  // 组数
+  int groupIndex = 1;
   RestClient restClient = RestClient(
     Dio()
       ..interceptors.add(
@@ -38,12 +41,32 @@ class _SubmitPageState extends State<SubmitPage> {
   Score score = Score(
     score1: 0,
     score2: 0,
-    school_name: groups.first,
+    school_name: groups.first.schollName,
     sub_name: '',
     group: 0,
   );
 
   int curScore = 0;
+
+  void changeOrg() async {
+    String? name = await showMenu<String>(
+      context: context,
+      position: RelativeRect.fromLTRB(10, 10, 10, 10),
+      items: <PopupMenuEntry<String>>[
+        for (Organization organization in groups)
+          PopupMenuItem(
+            child: Text(organization.schollName),
+            value: organization.schollName,
+          ),
+      ],
+    );
+    if (name != null) {
+      score.school_name = name;
+    }
+    print(score.school_name);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,35 +82,108 @@ class _SubmitPageState extends State<SubmitPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    title('学校'),
+                    title('队伍'),
                     const SizedBox(height: 10),
-                    GestureDetector(
-                      onTap: () async {
-                        score.school_name = await showMenu<String>(
-                          context: context,
-                          position: RelativeRect.fill,
-                          items: <PopupMenuEntry<String>>[
-                            for (String school in groups)
-                              PopupMenuItem(
-                                child: Text(school),
-                                value: school,
-                              ),
-                          ],
-                        );
-                        print(score.school_name);
-                        setState(() {});
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xffe8e9ee),
-                          borderRadius: BorderRadius.circular(10),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            changeOrg();
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xffe8e9ee),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(score.school_name ?? ''),
+                          ),
                         ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(score.school_name ?? ''),
-                      ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        GestureWithScale(
+                          onTap: () {
+                            changeOrg();
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            width: 100,
+                            height: 36,
+                            child: Center(
+                              child: Text(
+                                '更改队伍',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                     title('组数'),
+                    SizedBox(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: CheckContainer(
+                              groupValue: groupIndex,
+                              value: 1,
+                              onChanged: (value) {
+                                groupIndex = value;
+                                setState(() {});
+                              },
+                              child: Text(
+                                '1',
+                                style: TextStyle(
+                                  fontSize: 14.w,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: CheckContainer(
+                              groupValue: groupIndex,
+                              value: 2,
+                              onChanged: (value) {
+                                groupIndex = value;
+                                setState(() {});
+                              },
+                              child: Text(
+                                '2',
+                                style: TextStyle(
+                                  fontSize: 14.w,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: CheckContainer(
+                              groupValue: groupIndex,
+                              value: 3,
+                              onChanged: (value) {
+                                groupIndex = value;
+                                setState(() {});
+                              },
+                              child: Text(
+                                '3',
+                                style: TextStyle(
+                                  fontSize: 14.w,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     title('比赛轮数'),
                     const SizedBox(height: 10),
@@ -187,6 +283,7 @@ class _SubmitPageState extends State<SubmitPage> {
                     } else {
                       score.score2 = curScore;
                     }
+                    score.group = groupIndex;
                     score.time = DateTime.now().millisecond;
                     try {
                       Score res = await restClient.createScore(score);
@@ -227,8 +324,66 @@ class _SubmitPageState extends State<SubmitPage> {
       data,
       style: TextStyle(
         color: Theme.of(context).primaryColor,
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+}
+
+class CheckContainer extends StatelessWidget {
+  const CheckContainer({
+    Key? key,
+    this.onChanged,
+    this.value,
+    this.groupValue,
+    this.child,
+  }) : super(key: key);
+
+  final void Function(int value)? onChanged;
+  final int? value;
+  final int? groupValue;
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isCheck = value == groupValue;
+    return Container(
+      decoration: isCheck
+          ? BoxDecoration(
+              borderRadius: BorderRadius.circular(16.w),
+              border: Border.all(
+                color: Theme.of(context).primaryColor,
+                width: 2.w,
+              ),
+            )
+          : BoxDecoration(
+              borderRadius: BorderRadius.circular(16.w),
+              border: Border.all(
+                color: Colors.transparent,
+                width: 2.w,
+              ),
+            ),
+      padding: EdgeInsets.all(4.w),
+      child: GestureDetector(
+        onTap: () {
+          onChanged?.call(value!);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xffe8e9ee),
+            borderRadius: BorderRadius.circular(12.w),
+            // border: Border.all(
+            //   color: Colors.grey.withOpacity(0.2),
+            //   width: 2.w,
+            // ),
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: 20.w,
+            vertical: 10.w,
+          ),
+          child: Center(child: child),
+        ),
       ),
     );
   }
