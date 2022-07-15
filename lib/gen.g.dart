@@ -49,10 +49,9 @@ class _RestClient implements RestClient {
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<Score>(
             Options(method: 'POST', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/score',
+                .compose(_dio.options, '/score/',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    print(_result);
     final value = Score.fromJson(_result.data!);
     return value;
   }
@@ -65,7 +64,7 @@ class _RestClient implements RestClient {
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<List<dynamic>>(_setStreamType<List<Score>>(
         Options(method: 'GET', headers: _headers, extra: _extra)
-            .compose(_dio.options, '/score',
+            .compose(_dio.options, '/score/',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     var value = _result.data!

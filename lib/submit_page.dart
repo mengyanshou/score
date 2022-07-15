@@ -35,7 +35,15 @@ class _SubmitPageState extends State<SubmitPage> {
         ),
       ),
   );
+  Score score = Score(
+    score1: 0,
+    score2: 0,
+    school_name: '',
+    sub_name: '',
+    group: 0,
+  );
 
+  int curScore = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,37 +61,42 @@ class _SubmitPageState extends State<SubmitPage> {
                   title('学校'),
                   const SizedBox(height: 10),
                   GestureDetector(
-                    onTap: () {
-                      showMenu(
+                    onTap: () async {
+                      score.school_name = await showMenu<String>(
                         context: context,
                         position: RelativeRect.fill,
-                        items: <PopupMenuEntry>[
+                        items: <PopupMenuEntry<String>>[
                           for (String school in schools)
-                            PopupMenuItem(child: Text(school)),
+                            PopupMenuItem(
+                              child: Text(school),
+                              value: school,
+                            ),
                         ],
                       );
+                      print(score.school_name);
+                      setState(() {});
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xffe8e9ee),
+                        color: const Color(0xffe8e9ee),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(schools.first),
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(score.school_name ?? ''),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   title('组数'),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   title('比赛轮数'),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   SizedBox(
                     child: Row(
                       children: [
                         Expanded(
                           child: CheckContainer(
                             groupValue: gameIndex,
-                            value: 0,
+                            value: 1,
                             onChanged: (value) {
                               gameIndex = value;
                               setState(() {});
@@ -100,7 +113,7 @@ class _SubmitPageState extends State<SubmitPage> {
                         Expanded(
                           child: CheckContainer(
                             groupValue: gameIndex,
-                            value: 1,
+                            value: 2,
                             onChanged: (value) {
                               gameIndex = value;
                               setState(() {});
@@ -118,7 +131,7 @@ class _SubmitPageState extends State<SubmitPage> {
                     ),
                   ),
                   title('录入人'),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
@@ -130,14 +143,17 @@ class _SubmitPageState extends State<SubmitPage> {
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
                         ),
-                        fillColor: Color(0xffe8e9ee),
+                        fillColor: const Color(0xffe8e9ee),
                         filled: true,
                       ),
+                      onChanged: (value) {
+                        score.sub_name = value;
+                      },
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   title('此轮分数'),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
@@ -149,32 +165,33 @@ class _SubmitPageState extends State<SubmitPage> {
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
                         ),
-                        fillColor: Color(0xffe8e9ee),
+                        fillColor: const Color(0xffe8e9ee),
                         filled: true,
                       ),
+                      onChanged: (value) {
+                        curScore = int.tryParse(value) ?? 0;
+                      },
                     ),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.only(bottom: 12),
               child: GestureWithScale(
                 onTap: () async {
                   // print(await RestClient(Dio()).getScores());
+                  if (gameIndex == 0) {
+                    score.score1 = curScore;
+                  } else {
+                    score.score2 = curScore;
+                  }
+                  score.time = DateTime.now().millisecond;
                   try {
-                    Score score = await restClient.createScore(
-                      Score(
-                        group: 0,
-                        school_name: '成都大学',
-                        score1: 100,
-                        score2: 200,
-                        sub_name: '毛阳',
-                        time: DateTime.now().millisecond,
-                      ),
-                    );
+                    Score res = await restClient.createScore(score);
                   } on DioError catch (e) {
                     print(e.error);
+                    print(e.message);
                   }
                 },
                 child: Container(
@@ -184,8 +201,8 @@ class _SubmitPageState extends State<SubmitPage> {
                     color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Center(
-                    child: Text(
+                  child: const Center(
+                    child: const Text(
                       '提交',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,

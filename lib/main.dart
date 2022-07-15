@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'nav.dart';
 import 'submit_page.dart';
 
 void main() {
@@ -17,7 +18,40 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SubmitPage(),
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int index = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            child: [
+              const SubmitPage(),
+              const SubmitPage(),
+            ][index],
+          ),
+          Nav(
+            value: index,
+            onTap: (value) {
+              index = value;
+              setState(() {});
+            },
+          ),
+        ],
+      ),
     );
   }
 }

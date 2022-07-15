@@ -8,10 +8,10 @@ part 'gen.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @POST("/score")
+  @POST("/score/")
   Future<Score> createScore(@Body() Score score);
 
-  @GET("/score")
+  @GET("/score/")
   Future<List<Score>> getScores();
 }
 
