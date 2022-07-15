@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:global_repository/global_repository.dart';
 
 import 'nav.dart';
+import 'screens/controller/show_controller.dart';
 import 'screens/show_screen.dart';
-import 'submit_page.dart';
+import 'screens/submit_page.dart';
 
 void main() {
+  Get.put(ShowController());
   runApp(const MyApp());
+  StatusBarUtil.transparent();
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: Color(0xff061a3f),
       ),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }
@@ -36,6 +40,9 @@ class _HomePageState extends State<HomePage> {
   int index = 0;
   @override
   Widget build(BuildContext context) {
+    if (GetPlatform.isDesktop) {
+      return const ShowScreen();
+    }
     return Scaffold(
       body: Column(
         children: [
