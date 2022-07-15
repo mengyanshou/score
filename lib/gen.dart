@@ -23,6 +23,7 @@ class Score {
   int? group;
   int? time;
   String? sub_name;
+  String? team;
 
   Score({
     this.school_name,
@@ -31,12 +32,13 @@ class Score {
     this.group,
     this.time,
     this.sub_name,
+    this.team,
   });
 
   factory Score.fromJson(Map<String, dynamic> json) => _$ScoreFromJson(json);
   Map<String, dynamic> toJson() => _$ScoreToJson(this);
   @override
   String toString() {
-    return 'school:${school_name} score1:$score1 score2:$score2 group:$group sub_name:$sub_name';
+    return 'school:${school_name} score1:$score1 score2:$score2 group:$group sub_name:$sub_name team:$team';
   }
 }

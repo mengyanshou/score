@@ -13,6 +13,7 @@ Score _$ScoreFromJson(Map<String, dynamic> json) => Score(
       group: json['group'] as int?,
       time: json['time'] as int?,
       sub_name: json['sub_name'] as String?,
+      team: json['team'] as String?,
     );
 
 Map<String, dynamic> _$ScoreToJson(Score instance) => <String, dynamic>{
@@ -22,6 +23,7 @@ Map<String, dynamic> _$ScoreToJson(Score instance) => <String, dynamic>{
       'group': instance.group,
       'time': instance.time,
       'sub_name': instance.sub_name,
+      'team': instance.team,
     };
 
 // **************************************************************************

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -72,7 +73,8 @@ class _ShowScreenState extends State<ShowScreen> {
                   Row(
                     children: [
                       Expanded(child: title()),
-                      if (GetPlatform.isDesktop) Expanded(child: title()),
+                      if (GetPlatform.isDesktop && scores.length > 14)
+                        Expanded(child: title()),
                     ],
                   ),
                   const Divider(),
@@ -81,8 +83,10 @@ class _ShowScreenState extends State<ShowScreen> {
                       children: [
                         Expanded(
                           child: ListView.separated(
-                            physics: BouncingScrollPhysics(),
-                            itemCount: scores.length,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: GetPlatform.isDesktop
+                                ? min(scores.length, 14)
+                                : scores.length,
                             itemBuilder: (context, index) {
                               Score score = scores[index];
                               return item(index, score);
@@ -99,13 +103,13 @@ class _ShowScreenState extends State<ShowScreen> {
                             width: 1,
                             color: Colors.black12,
                           ),
-                        if (GetPlatform.isDesktop)
+                        if (GetPlatform.isDesktop && scores.length > 14)
                           Expanded(
                             child: ListView.separated(
-                              itemCount: scores.length,
+                              itemCount: scores.length - 14,
                               itemBuilder: (context, index) {
-                                Score score = scores[index];
-                                return item(index, score);
+                                Score score = scores[index + 14];
+                                return item(index + 14, score);
                               },
                               padding: EdgeInsets.zero,
                               separatorBuilder:
@@ -226,7 +230,7 @@ class _ShowScreenState extends State<ShowScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            score.sub_name!,
+                            score.team!,
                             style: const TextStyle(
                               fontSize: 14.0,
                               color: const Color(0xff333333),
@@ -293,7 +297,7 @@ class _ShowScreenState extends State<ShowScreen> {
 
   Widget three(Score score) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
           Image.asset(
