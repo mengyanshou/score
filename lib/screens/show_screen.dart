@@ -62,17 +62,17 @@ class _ShowScreenState extends State<ShowScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
-                Text('排名'),
+                Text(' 排名  '),
                 Text('学院|队伍'),
                 Text('第一轮'),
                 Text('第二轮'),
-                Text('总分'),
+                Text('总分 '),
               ],
             ),
           ),
           Expanded(
             flex: 5,
-            child: ListView.builder(
+            child: ListView.separated(
                 itemCount: data.length,
                 itemBuilder: (context, index) {
                   return Container(
@@ -82,6 +82,7 @@ class _ShowScreenState extends State<ShowScreen> {
                       children: [
                         Text('${index + 1}'),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const CircleAvatar(
                               backgroundImage:
@@ -93,10 +94,12 @@ class _ShowScreenState extends State<ShowScreen> {
                                 Text(
                                   data[index]['sub_name'],
                                   style: const TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: 14.0,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Text(data[index]['school_name']),
+                                Text(data[index]['school_name'],style: TextStyle(
+                                  fontSize: 10.0,
+                                ),),
                               ],
                             )
                           ],
@@ -112,7 +115,9 @@ class _ShowScreenState extends State<ShowScreen> {
                       ],
                     ),
                   );
-                }),
+                }, separatorBuilder: (BuildContext context, int index) {
+                  return const Divider();
+            },),
           ),
         ],
       ),
