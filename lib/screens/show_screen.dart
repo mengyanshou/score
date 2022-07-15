@@ -32,19 +32,6 @@ class _ShowScreenState extends State<ShowScreen> {
       body: Stack(
         children: [
           header(),
-          // SizedBox(
-          //   height: 30,
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: const [
-          //       Text(' 排名  '),
-          //       Text('学院|队伍'),
-          //       Text('第一轮'),
-          //       Text('第二轮'),
-          //       Text('总分 '),
-          //     ],
-          //   ),
-          // ),
           body(),
         ],
       ),
@@ -55,7 +42,7 @@ class _ShowScreenState extends State<ShowScreen> {
     return GetBuilder<ShowController>(builder: (controller) {
       List<Score> scores = controller.scores;
       return Padding(
-        padding: const EdgeInsets.only(top: 100),
+        padding: const EdgeInsets.only(top: 200),
         child: Material(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -291,22 +278,31 @@ class _ShowScreenState extends State<ShowScreen> {
 
   Widget header() {
     return Container(
-      color: Theme.of(context).primaryColor.withOpacity(0.2),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/backgroundImage.png'),
+          fit: BoxFit.fill,
+        )
+      ),
+      width: double.infinity,
+      // color: Theme.of(context).primaryColor.withOpacity(0.2),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top: 16.0),
         child: Column(
           children: const [
             Text(
               'ENJOY AI Master 2022西部选拔赛',
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(fontSize: 16.0,color: Colors.white),
             ),
+            SizedBox(height: 10,),
             Text(
               '2022全国大学生智能汽车竞赛',
-              style: TextStyle(fontSize: 32.0),
+              style: TextStyle(fontSize: 32.0,color: Colors.white),
             ),
+            SizedBox(height: 10,),
             Text(
               '百度智慧交通赛项',
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(fontSize: 16.0,color: Colors.white),
             ),
           ],
         ),
