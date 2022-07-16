@@ -297,7 +297,7 @@ class _ShowScreenState extends State<ShowScreen> {
 
   Widget three(Score score) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Column(
         children: [
           Image.asset(
@@ -326,16 +326,17 @@ class _ShowScreenState extends State<ShowScreen> {
         padding: const EdgeInsets.only(top: 16.0),
         child: Column(
           children: const [
+            SizedBox(height: 12),
             Text(
-              'ENJOY AI Master 2022西部选拔赛',
+              '2022西部选拔赛',
               style: TextStyle(fontSize: 16.0, color: Colors.white),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 2),
             Text(
               '2022全国大学生智能汽车竞赛',
-              style: TextStyle(fontSize: 32.0, color: Colors.white),
+              style: TextStyle(fontSize: 32.0, color: Colors.white,fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 2),
             Text(
               '百度智慧交通赛项',
               style: TextStyle(fontSize: 16.0, color: Colors.white),
