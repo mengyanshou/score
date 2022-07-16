@@ -317,8 +317,8 @@ class _ShowScreenState extends State<ShowScreen> {
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
-        image: AssetImage('assets/backgroundImage.png'),
-        fit: BoxFit.fill,
+        image: AssetImage('assets/backgroundImage.jpeg'),
+        fit: BoxFit.fill
       )),
       width: double.infinity,
       // color: Theme.of(context).primaryColor.withOpacity(0.2),

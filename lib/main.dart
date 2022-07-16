@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ToastApp(
       child: GetMaterialApp(
-        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        title: '2022全国大学生智能汽车竞赛',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           primaryColor: Color(0xff061a3f),
