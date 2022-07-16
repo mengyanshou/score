@@ -334,7 +334,7 @@ class _ShowScreenState extends State<ShowScreen> {
             SizedBox(height: 2),
             Text(
               '2022全国大学生智能汽车竞赛',
-              style: TextStyle(fontSize: 32.0, color: Colors.white,fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18.0, color: Colors.white,fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 2),
             Text(
